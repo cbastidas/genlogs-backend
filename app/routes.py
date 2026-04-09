@@ -31,10 +31,15 @@ def get_carriers(request: RouteRequest):
     Receives from_city and to_city, returns the list of carriers
     operating on that corridor with their trucks/day data.
     """
-    # Normalize to lowercase for matching
-    key = (request.from_city.lower().strip(), request.to_city.lower().strip())
+    from_normalized = request.from_city.lower().strip()
+    to_normalized = request.to_city.lower().strip()
 
-    carriers = ROUTE_DATA.get(key, DEFAULT_CARRIERS)
+    # Flexible matching — check if any key is contained in the request
+    carriers = DEFAULT_CARRIERS
+    for (from_key, to_key), value in ROUTE_DATA.items():
+        if from_key in from_normalized and to_key in to_normalized:
+            carriers = value
+            break
 
     return RouteResponse(
         from_city=request.from_city,
