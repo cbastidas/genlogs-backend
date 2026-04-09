@@ -1,12 +1,11 @@
 from fastapi import APIRouter
 from app.models import RouteRequest, RouteResponse, Carrier
 
-# APIRouter lets us keep routes organized in separate files
 router = APIRouter()
 
 # Hardcoded carrier data as specified in the test
 ROUTE_DATA = {
-    ("new york", "washington dc"): [
+    ("new york", "washington"): [
         Carrier(name="Knight-Swift Transport Services", trucks_per_day=10),
         Carrier(name="J.B. Hunt Transport Services Inc", trucks_per_day=7),
         Carrier(name="YRC Worldwide", trucks_per_day=5),
@@ -18,7 +17,6 @@ ROUTE_DATA = {
     ],
 }
 
-# Default carriers for any other route
 DEFAULT_CARRIERS = [
     Carrier(name="UPS Inc.", trucks_per_day=11),
     Carrier(name="FedEx Corp", trucks_per_day=9),
@@ -31,10 +29,10 @@ def get_carriers(request: RouteRequest):
     Receives from_city and to_city, returns the list of carriers
     operating on that corridor with their trucks/day data.
     """
-    from_normalized = request.from_city.lower().strip()
-    to_normalized = request.to_city.lower().strip()
+    # Normalize — remove punctuation, lowercase
+    from_normalized = request.from_city.lower().replace(".", "").strip()
+    to_normalized = request.to_city.lower().replace(".", "").strip()
 
-    # Flexible matching — check if any key is contained in the request
     carriers = DEFAULT_CARRIERS
     for (from_key, to_key), value in ROUTE_DATA.items():
         if from_key in from_normalized and to_key in to_normalized:
