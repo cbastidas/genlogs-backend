@@ -39,6 +39,19 @@ def get_carriers(request: RouteRequest):
             carriers = value
             break
 
+    # I have a tweak to the response
+    #if "usa" not in from_normalized or "usa" not in to_normalized:
+    #raise HTTPException(
+    #    status_code=400,
+    #    detail="Only US cities are supported"
+    #)
+    
+    #if carriers == DEFAULT_CARRIERS and no_match:
+    #raise HTTPException(
+    #    status_code=404,
+    #    detail="No carriers found for this route"
+    #)
+
     return RouteResponse(
         from_city=request.from_city,
         to_city=request.to_city,
