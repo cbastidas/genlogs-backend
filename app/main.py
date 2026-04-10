@@ -12,7 +12,7 @@ app = FastAPI(
 # CORS — allows the React frontend to call this API from the browser
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace * with your Vercel URL
+    allow_origins=["https://genlogs-frontend-lyart.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
